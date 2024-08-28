@@ -11,9 +11,6 @@ This scorer can be used to filter useful information from large text corpora in 
 
 This model can also be found on [Huggingface](https://huggingface.co/lightblue/shitsu_text_scorer).
 
-# How to install
-
-
 # How to use
 
 ### With our scorer package
