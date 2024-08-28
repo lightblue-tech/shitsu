@@ -9,6 +9,8 @@ Our model is based on fasttext embeddings, meaning that it can be used on large 
 
 This scorer can be used to filter useful information from large text corpora in many languages.
 
+This model can also be found on [Huggingface](https://huggingface.co/lightblue/shitsu_text_scorer).
+
 # How to install
 
 
