@@ -13,9 +13,9 @@ import gzip
 import shutil
 import os
 from safetensors.torch import save_model
-import matplotlib.pyplot as plt
+from huggingface_hub import hf_hub_download
 
-from model import FasttextEmbedRegressor
+from shitsu.model import FasttextEmbedRegressor
 
 def train_regressor(X_train, X_test, y_train, y_test, train_epochs):
 
@@ -64,7 +64,7 @@ def download_file(url, filename):
     r = requests.get(url, stream=True)
     with open(filename, 'wb') as f:
         pbar = tqdm( unit="B", total=int( r.headers['Content-Length'] ) )
-        for chunk in r.iter_content(chunk_size=chunkSize): 
+        for chunk in r.iter_content(chunk_size=chunkSize):
             if chunk: # filter out keep-alive new chunks
                 pbar.update (len(chunk))
                 f.write(chunk)
@@ -79,6 +79,7 @@ def download_fasttext_vectors(lang_code):
         return None
 
     print(f"Downloading {lang_code} vectors")
+
     download_file(f"https://dl.fbaipublicfiles.com/fasttext/vectors-crawl/{filename}.gz", f"{filename}.gz")
 
     print(f"Unzipping {lang_code} vectors")
@@ -88,18 +89,24 @@ def download_fasttext_vectors(lang_code):
 
     print(f"Removing zipped {lang_code} vectors")
     os.remove(f"{filename}.gz")
-    
+
     return True
 
 def create_quality_eval_model(lang_code, train_epochs=10):
+    # Some languages do not have a crawl vector on Fasttext, so we use the wikipedia vector instead in these cases
+    no_crawl_vector_langs = ["ha"]
 
-    download_fasttext_vectors(lang_code)
+    if lang_code in no_crawl_vector_langs:
+        fasttext_model_path = hf_hub_download(repo_id=f"ptrdvn/fasttext-{lang_code}-vectors", filename="model.bin")
+        fasttext_model = fasttext.load_model(fasttext_model_path)
+    else:
+        download_fasttext_vectors(lang_code)
+        fasttext_model = fasttext.load_model(f"cc.{lang_code}.300.bin")
 
     dataset = load_dataset("lightblue/text_ratings", lang_code, split="train")
     text_list = dataset["selected_chunk"]
     label_float = [x / 100 for x in dataset["rating_float"]]
 
-    fasttext_model = fasttext.load_model(f"cc.{lang_code}.300.bin")
 
     embeddings = np.stack([fasttext_model.get_sentence_vector(
         x.replace("\n", " ")
@@ -116,14 +123,15 @@ def create_quality_eval_model(lang_code, train_epochs=10):
     metrics_df, model = train_regressor(X_train, X_test, y_train, y_test, train_epochs)
 
     test_df = pd.DataFrame({
-        "text": text_test, 
-        "gold_score": y_test, 
+        "text": text_test,
+        "gold_score": y_test,
         "pred_score": model(torch.Tensor(X_test)).detach().numpy().flatten()
     })
 
     save_model(model, f"{lang_code}.safetensors")
 
-    os.remove(get_filename(lang_code))
+    if os.path.exists(get_filename(lang_code)):
+        os.remove(get_filename(lang_code))
 
     return metrics_df, test_df
 
