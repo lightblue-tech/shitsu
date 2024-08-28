@@ -1,1 +1,1 @@
-from model import ShitsuScorer
+from shitsu.model import ShitsuScorer
