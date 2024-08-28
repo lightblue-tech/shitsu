@@ -37,7 +37,10 @@ scores
 
 ### Without our scorer package (i.e. without pip install)
 
-```python
+<details>
+  <summary>Show full code</summary>
+    
+  ```python
 
 from safetensors.torch import load_model
 import fasttext
@@ -84,6 +87,11 @@ scores = scorer.score(text_list)
 scores
 # array([ 0.9897383 , -0.08109612], dtype=float32)
 ```
+
+</details>
+
+
+
 
 # How we made the training data
 
