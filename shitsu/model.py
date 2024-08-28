@@ -24,7 +24,11 @@ class FasttextEmbedRegressor(nn.Module):
 
 class ShitsuScorer:
     def __init__(self, lang_code):
-        fasttext_model_path = hf_hub_download(repo_id=f"facebook/fasttext-{lang_code}-vectors", filename="model.bin")
+        # Some languages do not have a crawl vector on Fasttext, so we use the wikipedia vector instead in these cases
+        no_crawl_vector_langs = ["ha"]
+        fasttext_repo = "ptrdvn" if lang_code in no_crawl_vector_langs else "facebook"
+        
+        fasttext_model_path = hf_hub_download(repo_id=f"{fasttext_repo}/fasttext-{lang_code}-vectors", filename="model.bin")
         self.fasttext_model = fasttext.load_model(fasttext_model_path)
         self.regressor_model = FasttextEmbedRegressor().eval()
         regressor_model_path = hf_hub_download(repo_id=f"lightblue/shitsu_text_scorer", filename=f"{lang_code}.safetensors")
