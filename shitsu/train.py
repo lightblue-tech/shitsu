@@ -14,6 +14,7 @@ import shutil
 import os
 from safetensors.torch import save_model
 from huggingface_hub import hf_hub_download
+import matplotlib.pyplot as plt 
 
 from shitsu.model import FasttextEmbedRegressor
 
