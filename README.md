@@ -101,4 +101,4 @@ Your output should be only an integer from 0-100."""
 
 We then trained a small neural network on top of fasttext's embeddings to predict these scores.
 
-We chose the languages in this dataset by making a union set of the 30 most popular languages on earth as according to [Ethnologue 2024](https://www.ethnologue.com/insights/ethnologue200/) and the 30 most popular languages within MADLAD-400.
+We chose the 44 languages in this dataset by making a union set of the 30 most popular languages on earth as according to [Ethnologue 2024](https://www.ethnologue.com/insights/ethnologue200/) and the 30 most popular languages within MADLAD-400.
