@@ -26,7 +26,7 @@ text_list = [
     "Photosynthesis is a system of biological processes by which photosynthetic organisms, such as most plants, algae, and cyanobacteria, convert light energy, typically from sunlight, into the chemical energy necessary to fuel their metabolism.",
     "Congratulations! You have all been selected to receive a free gift card worth $1000. Click on this link [Link] to claim your reward now. Limited time offer, so act fast! Don't miss out on this amazing opportunity."]
 
-# Choose a language from one of: 'am', 'ar', 'bg', 'bn', 'cs', 'da', 'de', 'el', 'en', 'es', 'fa', 'fi', 'fr', 'gu', 'ha', 'hi', 'hu', 'id', 'it', 'ja', 'jv', 'kn', 'ko', 'lt', 'mr', 'nl', 'no', 'yo', 'zh'
+# Choose a language from one of: ['am', 'ar', 'bg', 'bn', 'cs', 'da', 'de', 'el', 'en', 'es', 'fa', 'fi', 'fr', 'gu', 'ha', 'hi', 'hu', 'id', 'it', 'ja', 'jv', 'kn', 'ko', 'lt', 'mr', 'nl', 'no', 'pl', 'pt', 'ro', 'ru', 'sk', 'sv', 'sw', 'ta', 'te', 'th', 'tl', 'tr', 'uk', 'ur', 'vi', 'yo', 'zh']
 language_code = "en"
 scorer = ShitsuScorer(language_code)
 scores = scorer.score(text_list)
